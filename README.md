@@ -8,11 +8,11 @@ Who is it for? Have you ever needed a suit before an interview or a dress before
 Essentially a public database of secondhand clothing that users can offer to swap. An explore page will allow for recommendations with search functionality.
 
 ## Timeline: 
-2/29 - First Pitch
-3/1 - Brainstorming Sessions
-3/20 - Development Started (Login and Authentication)
-4/4 - Demo Presentation (Explore and Search features)
-4/11 - Feedback Integration
-4/18 - User Testing
-4/25 - Final Touches
-4/25 - Last Class and Public Release
+- 2/29 - First Pitch
+- 3/1 - Brainstorming Sessions
+- 3/20 - Development Started (Login and Authentication)
+- 4/4 - Demo Presentation (Explore and Search features)
+- 4/11 - Feedback Integration
+- 4/18 - User Testing
+- 4/25 - Final Touches
+- 4/25 - Last Class and Public Release
