@@ -1,4 +1,4 @@
-# Campus Closet 👕😊
+# Campus Closet
 
 ## What’s our final project?
 Campus Closet is a platform for university students to swap, borrow and sell clothing to other students! It will include a social page that allows users to interact with others as well as find recommendations for their closet. 
