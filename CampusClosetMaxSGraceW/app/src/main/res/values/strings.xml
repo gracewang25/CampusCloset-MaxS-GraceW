@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">CampusCloset-MaxS-GraceW</string>
+    <string name="app_name">Campus Closet</string>
+    <string name="Loading">Loading…</string>
 </resources>
