@@ -19,25 +19,6 @@
         android:layout_below="@id/editTextItemName"
         android:layout_margin="16dp"/>
 
-    <Button
-        android:id="@+id/buttonUpload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload"
-        android:layout_below="@id/editTextTags"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-
-    <!-- ImageView for displaying selected image -->
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/placeholder_image"
-        android:layout_below="@id/buttonUpload"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-
     <!-- Button for selecting image -->
     <Button
         android:id="@+id/buttonSelectImage"
@@ -45,6 +26,26 @@
         android:layout_height="wrap_content"
         android:text="Select Image"
         android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+
+    <!-- ImageView for displaying selected image -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="380dp"
+        android:layout_height="300dp"
+        android:src="@drawable/placeholder_image"
+        android:layout_below="@id/buttonUpload"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload"
+        android:layout_below="@id/editTextTags"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
 
