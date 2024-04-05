@@ -1,6 +1,6 @@
 # CampusCloset (prev. ClothingSwap) 👕
-
-Update 2 Presentation - https://docs.google.com/presentation/d/14qpLxy5YtdOUxOJqi4Fe9RQ8DnWlGYTPCk9kaVlaU3I
+Go to maxim branch for latest changes.
+Update 2 - https://docs.google.com/presentation/d/14qpLxy5YtdOUxOJqi4Fe9RQ8DnWlGYTPCk9kaVlaU3I
 
 ## What’s our final project?
 Campus Closet is a platform for university students to swap, borrow and sell clothing to other students! It will include a social page that allows users to interact with others as well as find recommendations for their closet. 
