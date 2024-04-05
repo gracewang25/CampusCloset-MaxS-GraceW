@@ -1,4 +1,5 @@
-# Campus Closet
+# CampusCloset (prev. ClothingSwap)
+![banner](https://github.com/gracewang25/CampusCloset-MaxS-GraceW/assets/93232189/03ce523e-1987-4922-b709-fa01afc1467d)
 
 ## Our Update 2 Presentation
 https://docs.google.com/presentation/d/14qpLxy5YtdOUxOJqi4Fe9RQ8DnWlGYTPCk9kaVlaU3I
