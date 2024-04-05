@@ -1,6 +1,5 @@
 # CampusCloset (prev. ClothingSwap)
-![banner](https://github.com/gracewang25/CampusCloset-MaxS-GraceW/assets/93232189/03ce523e-1987-4922-b709-fa01afc1467d)
-
+<img width="309" alt="momjeans" src="https://github.com/gracewang25/CampusCloset-MaxS-GraceW/assets/93232189/0b5607f7-dcf4-4f40-a6e8-92380afa2553">
 ## Our Update 2 Presentation
 https://docs.google.com/presentation/d/14qpLxy5YtdOUxOJqi4Fe9RQ8DnWlGYTPCk9kaVlaU3I
 
