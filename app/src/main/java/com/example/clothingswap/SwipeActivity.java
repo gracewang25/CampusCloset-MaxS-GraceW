@@ -9,8 +9,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -67,19 +65,6 @@ public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnIt
         });
     }
 
-    @Override
-    public void onPassButtonClick(int position) {
-        // Handle pass button click logic here
-        showNextListing();
-    }
-
-    @Override
-    public void onMatchButtonClick(int position) {
-        // Handle match button click logic here
-        Intent intent = new Intent(SwipeActivity.this, MatchActivity.class);
-        startActivity(intent);
-    }
-
     private void retrieveListings() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -108,15 +93,6 @@ public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnIt
         recyclerView.scrollToPosition(currentIndex);
     }
 
-    private void showNextListing() {
-        if (currentIndex < totalListings - 1) {
-            currentIndex++;
-            cardAdapter.notifyDataSetChanged();
-        } else {
-            showEndOfCardsMessage();
-        }
-    }
-
     private void showEndOfCardsMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("No More Items")
@@ -128,5 +104,30 @@ public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnIt
                     }
                 })
                 .show();
+    }
+    @Override
+    public void onPassButtonClick(int position) {
+        currentIndex++;
+        if (currentIndex >= totalListings) {
+            showEndOfCardsMessage();
+        } else {
+            recyclerView.smoothScrollToPosition(currentIndex);
+        }
+    }
+
+    @Override
+    public void onMatchButtonClick(int position) {
+        // Get the current listing
+        Listing currentListing = listings.get(position);
+
+        // TODO: Implement the logic to handle the match, e.g., send a notification to the item owner
+
+        // Move to the next listing
+        currentIndex++;
+        if (currentIndex >= totalListings) {
+            showEndOfCardsMessage();
+        } else {
+            recyclerView.smoothScrollToPosition(currentIndex);
+        }
     }
 }

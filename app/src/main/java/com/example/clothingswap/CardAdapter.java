@@ -16,17 +16,8 @@ import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     private List<Listing> listings;
+    private OnItemClickListener listener;
 
-    public interface OnItemClickListener {
-        void onPassButtonClick(int position);
-        void onMatchButtonClick(int position);
-    }
-
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 
     public CardAdapter(List<Listing> listings) {
         this.listings = listings;
@@ -60,39 +51,42 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public class CardViewHolder extends RecyclerView.ViewHolder {
         ImageView itemImageView;
         TextView itemNameTextView;
-        Button passButtonCard;
-        Button matchButtonCard;
+        Button passButton;
+        Button matchButton;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
             itemImageView = itemView.findViewById(R.id.itemImageView);
             itemNameTextView = itemView.findViewById(R.id.itemNameTextView);
-            passButtonCard = itemView.findViewById(R.id.passButtonCard);
-            matchButtonCard = itemView.findViewById(R.id.matchButtonCard);
+            passButton = (Button) itemView.findViewById(R.id.passButtonCard);
+            matchButton = (Button) itemView.findViewById(R.id.matchButtonCard);
 
-            passButtonCard.setOnClickListener(new View.OnClickListener() {
+            passButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            onItemClickListener.onPassButtonClick(position);
-                        }
+                    if (listener != null) {
+                        listener.onPassButtonClick(getAdapterPosition());
                     }
                 }
             });
 
-            matchButtonCard.setOnClickListener(new View.OnClickListener() {
+            matchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            onItemClickListener.onMatchButtonClick(position);
-                        }
+                    if (listener != null) {
+                        listener.onMatchButtonClick(getAdapterPosition());
                     }
                 }
             });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onPassButtonClick(int position);
+        void onMatchButtonClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }
