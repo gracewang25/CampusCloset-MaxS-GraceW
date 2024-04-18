@@ -7,6 +7,8 @@ import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.time.Instant;
 import java.util.List;
 
@@ -38,13 +40,12 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Listing listing = listings.get(position);
 
-        // Load image into ImageView using a library like Picasso or Glide
-        // Example with Glide:
-        Instant Glide = null;
-//        Glide.with(holder.itemView.getContext())
-//                .load(listing.getImageUrl())
-//                .placeholder(R.drawable.placeholder_image)
-//                .into(holder.imageViewGrid);
+        // Load image into ImageView using Glide
+        Glide.with(holder.itemView.getContext())
+                .load(listing.getImageUri())
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.placeholder_image)
+                .into(holder.imageViewGrid);
 
         // Add click listeners or other view updates as needed
     }
