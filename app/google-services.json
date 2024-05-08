@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "726193664876",
+    "project_id": "clothingswap-f093c",
+    "storage_bucket": "clothingswap-f093c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726193664876:android:e14d453afe225fa5a97949",
+        "android_client_info": {
+          "package_name": "com.example.clothingswap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726193664876-tumlcq51akepg7k3ps55nr5jfjuhpj5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEi-TZwJViZYFjJJcECaBSZgLewNZEHkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726193664876-tumlcq51akepg7k3ps55nr5jfjuhpj5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
