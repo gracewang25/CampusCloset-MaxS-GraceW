@@ -147,6 +147,10 @@ public class Profile extends AppCompatActivity {
                 startActivity(new Intent(Profile.this, Profile.class));
                 finish();
                 return true;
+            } else if (item.getItemId() == R.id.nav_swipe) {
+                startActivity(new Intent(Profile.this, SwipeActivity.class));
+                finish();
+                return true;
             }
             return false;
         });
@@ -216,7 +220,7 @@ public class Profile extends AppCompatActivity {
     }
 
     private void loadUserProfile() {
-        editTextName.setText("John Doe");
+        editTextName.setText("Please enter a Name");
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
