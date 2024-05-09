@@ -23,10 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnItemClickListener {
+    BottomNavigationView bottomNav;
     private RecyclerView recyclerView;
     private CardAdapter cardAdapter;
-    private BottomNavigationView bottomNavigationView;
-
     private List<Listing> listings;
     private int currentIndex = 0;
     private int totalListings = 0;
@@ -39,19 +38,21 @@ public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnIt
         setContentView(R.layout.activity_swipe);
 
         recyclerView = findViewById(R.id.recyclerView);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNav = findViewById(R.id.bottom_navigation);
 
         listings = new ArrayList<>();
+//        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.blue));  // Ensure this color is defined in your colors.xml
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
 
-        //setting the appropriate state for buttons
-        bottomNavigationView.setLabelVisibilityMode(BottomNavigationView.LABEL_VISIBILITY_LABELED);
-        bottomNavigationView.setSelectedItemId(R.id.nav_swipe);
+        //setting the appropriate state for buttons + initializing bottom nav styling
+//        bottomNav.setLabelVisibilityMode(BottomNavigationView.LABEL_VISIBILITY_LABELED);
+        bottomNav.setSelectedItemId(R.id.nav_swipe);
+
 
         retrieveListings();
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+        bottomNav.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 // Navigate to Home
                 startActivity(new Intent(SwipeActivity.this, MainActivity.class));

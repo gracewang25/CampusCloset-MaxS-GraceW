@@ -5,6 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/blue</item>
     </style>
-
+    <style name="BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/blue</item>
+        <item name="labelVisibilityMode">labeled</item>
+    </style>
     <style name="Theme.Clothingswap" parent="Base.Theme.Clothingswap" />
 </resources>
