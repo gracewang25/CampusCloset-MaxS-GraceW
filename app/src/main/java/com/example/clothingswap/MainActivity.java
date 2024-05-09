@@ -68,13 +68,20 @@ public class MainActivity extends AppCompatActivity {
         retrieveListings();
 
         // Navigation setup using if-else
-        bottomNav.setOnNavigationItemSelectedListener(item -> {
+        bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_swipe) {
                 startActivity(new Intent(MainActivity.this, SwipeActivity.class));
                 return true;
             } else if (id == R.id.nav_add) {
-                startActivity(new Intent(MainActivity.this, CreateListing.class));
+                // Check if the city is known before starting CreateListing
+                if (userCity != null && !userCity.isEmpty()) {
+                    Intent intent = new Intent(MainActivity.this, CreateListing.class);
+                    intent.putExtra("userCity", userCity); // Pass the city as an extra
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "City not determined yet. Please wait or try again.", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             } else if (id == R.id.nav_logout) {
                 logoutUser();
