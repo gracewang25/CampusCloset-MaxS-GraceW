@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ListingAdapter listingAdapter;
     private List<Listing> listings;
+    private SearchView searchView;
+
+
 
     private FusedLocationProviderClient fusedLocationClient;
     private final int REQUEST_LOCATION_PERMISSION = 1;
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         bottomNav = findViewById(R.id.bottom_navigation);
+        searchView = findViewById(R.id.searchView);
+
+
 
         photoGrid = findViewById(R.id.photoGrid);
         photoGrid.setLayoutManager(new GridLayoutManager(this, 3));
