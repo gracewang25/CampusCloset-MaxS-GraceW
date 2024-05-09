@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 
 import okhttp3.HttpUrl;
@@ -243,11 +244,16 @@ public class CreateListing extends AppCompatActivity {
             StringBuilder tagsBuilder = new StringBuilder();
             double confidenceThreshold = 40.0;
 
+            // Define an array of tags to exclude
+            String[] excludedTags = {"apparel", "clothing", "garment"};
+
             for (int i = 0; i < tagsArray.length(); i++) {
                 JSONObject tagObject = tagsArray.getJSONObject(i);
                 double confidence = tagObject.getDouble("confidence");
-                if (confidence > confidenceThreshold) {
-                    String tag = tagObject.getJSONObject("tag").getString("en");
+                String tag = tagObject.getJSONObject("tag").getString("en");
+
+                // Check if the tag is not in the excludedTags array
+                if (confidence > confidenceThreshold && !Arrays.asList(excludedTags).contains(tag)) {
                     tagsBuilder.append(tag).append(", ");
                 }
             }
