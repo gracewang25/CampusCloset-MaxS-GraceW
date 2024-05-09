@@ -210,7 +210,12 @@ public class CreateListing extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseString = response.body().string();
-                    String uploadId = extractUploadId(responseString); // Implement this method to parse JSON and extract upload_id
+                    String uploadId = null; // Implement this method to parse JSON and extract upload_id
+                    try {
+                        uploadId = extractUploadId(responseString);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                     fetchTagsFromImagga(uploadId);
                 } else {
                     handleErrorResponse(response);
