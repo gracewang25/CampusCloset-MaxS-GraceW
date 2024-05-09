@@ -25,6 +25,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.annotations.NotNull;
@@ -329,20 +331,27 @@ public class CreateListing extends AppCompatActivity {
     }
 
     private void uploadListing() {
+        // Get the item name and tags from EditText fields
         String itemName = editTextItemName.getText().toString().trim();
         String tags = editTextTags.getText().toString().trim();
 
+        // Validate input fields
         if (itemName.isEmpty() || tags.isEmpty() || selectedImageUri == null) {
             Toast.makeText(this, "Please fill in all fields and select an image", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Get the currently logged-in user's email
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userEmail = currentUser != null ? currentUser.getEmail() : "";
+
+        // Upload the listing details, image URI, city, and user email to Firebase
         String listingId = databaseReference.push().getKey();
-        Listing listing = new Listing(listingId, itemName, tags, selectedImageUri.toString(), userCity);
+        Listing listing = new Listing(listingId, itemName, tags, selectedImageUri.toString(), userCity, userEmail);
         databaseReference.child(listingId).setValue(listing);
 
         Toast.makeText(this, "Listing uploaded successfully", Toast.LENGTH_SHORT).show();
-        finish();
+        finish(); // Close the activity after uploading
     }
 
     // Retrofit interfaces

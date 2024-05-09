@@ -71,6 +71,9 @@ public class Profile extends AppCompatActivity {
         user = auth.getCurrentUser();
         setupRecyclerView();
         loadUserProfile();
+        retrieveUserListings();
+
+
 
 
         buttonEditSave.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +128,9 @@ public class Profile extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
     }
+
+
+
     private void setupRecyclerView() {
         listings = new ArrayList<>();
         listingAdapter = new ListingAdapter(listings);
@@ -136,7 +142,7 @@ public class Profile extends AppCompatActivity {
         if (user != null) {
             String userEmail = user.getEmail();
             DatabaseReference userListingRef = FirebaseDatabase.getInstance().getReference("listings");
-            userListingRef.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
+            userListingRef.orderByChild("userEmail").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     listings.clear();

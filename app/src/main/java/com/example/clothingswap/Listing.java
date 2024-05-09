@@ -6,19 +6,31 @@ public class Listing {
     private String itemName;
     private String tags;
     private String imageUri;
-    private String city; // Field for storing city
+    private String city;
+    private String userEmail;
 
-    // Default constructor (required for Firebase)
+    // Default constructor required for calls to DataSnapshot.getValue(Listing.class)
     public Listing() {
     }
 
     // Constructor with parameters
-    public Listing(String listingId, String itemName, String tags, String imageUri, String city) { // Include city in parameters
+    public Listing(String listingId, String itemName, String tags, String imageUri, String city, String userEmail) {
         this.listingId = listingId;
         this.itemName = itemName;
         this.tags = tags;
         this.imageUri = imageUri;
-        this.city = city; // Initialize city
+        this.city = city;
+        this.userEmail = userEmail;
+    }
+
+    // Getters and setters
+    // Include getters and setters for email
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     // Getters and setters
