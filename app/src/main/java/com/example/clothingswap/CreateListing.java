@@ -77,7 +77,8 @@ public class CreateListing extends AppCompatActivity {
 
     private static final int CAMERA_ACTION = 1;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int REQUEST_IMAGE_PERMISSION = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+
 
 
     private ImaggaService imaggaService;
@@ -102,7 +103,6 @@ public class CreateListing extends AppCompatActivity {
         buttonUpload = findViewById(R.id.buttonUpload);
         buttonSelectImage = findViewById(R.id.buttonSelectImage);
         imageView = findViewById(R.id.imageView);
-        buttonTakePhoto = findViewById(R.id.buttonTakePhoto);
         TextView textViewCity = findViewById(R.id.textViewCity);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
@@ -119,20 +119,6 @@ public class CreateListing extends AppCompatActivity {
 
         buttonUpload.setOnClickListener(v -> uploadListing());
 
-        buttonTakePhoto.setOnClickListener(v -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                // Create a new file and retrieve its URI
-                File photoFile = getPhotoFile();
-                if (photoFile != null) {
-                    selectedImageUri = FileProvider.getUriForFile(this, FILE_PROVIDER_AUTHORITY, photoFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
-                    startActivityForResult(intent, CAMERA_ACTION);
-                }
-            } else {
-                Toast.makeText(CreateListing.this, "No camera app available", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         buttonSelectImage.setOnClickListener(v -> selectImage());
     }
@@ -159,26 +145,25 @@ public class CreateListing extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
             uploadImageToImagga(selectedImageUri);
-        } else if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            if (selectedImageUri != null) {
-                imageView.setImageURI(selectedImageUri);
-                uploadImageToImagga(selectedImageUri);
-            } else {
+        }else{
                 Toast.makeText(this, "Error capturing image.", Toast.LENGTH_SHORT).show();
             }
 
         }
-    }
+
+
+
+
+
+
+
 
 
 
