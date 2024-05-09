@@ -1,5 +1,5 @@
-# CampusCloset (prev. ClothingSwap) 👕
-Go to maxim branch for latest changes.
+# CampusCloset 👕
+Go to maxim2 branch for latest changes
 https://docs.google.com/presentation/d/14qpLxy5YtdOUxOJqi4Fe9RQ8DnWlGYTPCk9kaVlaU3I
 
 ## What’s our final project?
