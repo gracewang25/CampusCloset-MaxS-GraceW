@@ -72,23 +72,17 @@ public class CreateListing extends AppCompatActivity {
     private static final int REQUEST_IMAGE_PERMISSION = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+
     private void requestImagePermission() {
-        
+        String requiredPermission;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS}, REQUEST_IMAGE_PERMISSION);
-            } else {
-                // Permission already granted
-                selectImage();
-            }
+            requiredPermission = Manifest.permission.READ_MEDIA_IMAGES;
         } else {
-            // On older Android versions, continue using READ_EXTERNAL_STORAGE
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS}, REQUEST_IMAGE_PERMISSION);
-            } else {
-                // Permission already granted
-                selectImage();
-            }
+            requiredPermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        }
+
+        if (ContextCompat.checkSelfPermission(this, requiredPermission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{requiredPermission}, REQUEST_IMAGE_PERMISSION);
         }
     }
 
@@ -97,18 +91,22 @@ public class CreateListing extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_IMAGE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                selectImage();
+                // Permission was granted, handle the camera or file access functionality
             } else {
-                Toast.makeText(this, "Permission is required to access images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission denied to access your External storage", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_listing);
+
+        // Request necessary permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            requestImagePermission();  // Ensure this method is correctly implemented as discussed
+        }
 
         // Initialize components
         editTextItemName = findViewById(R.id.editTextItemName);
@@ -131,34 +129,74 @@ public class CreateListing extends AppCompatActivity {
             textViewCity.setText("This item will be listed in: City not available");  // Fallback text
         }
 
-        buttonUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadListing();
+        buttonUpload.setOnClickListener(v -> uploadListing());
+
+        buttonTakePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, CAMERA_ACTION);
+            } else {
+                Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
             }
         });
 
-        buttonTakePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(intent.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(intent, CAMERA_ACTION);
-
-                }else{
-                    Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-        buttonSelectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
-            }
-        });
+        buttonSelectImage.setOnClickListener(v -> selectImage());
     }
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_create_listing);
+//
+//        // Initialize components
+//        editTextItemName = findViewById(R.id.editTextItemName);
+//        editTextTags = findViewById(R.id.editTextTags);
+//        buttonUpload = findViewById(R.id.buttonUpload);
+//        buttonSelectImage = findViewById(R.id.buttonSelectImage);
+//        imageView = findViewById(R.id.imageView);
+//        buttonTakePhoto = findViewById(R.id.buttonTakePhoto);
+//        TextView textViewCity = findViewById(R.id.textViewCity);  // Reference to the TextView
+//
+//        databaseReference = FirebaseDatabase.getInstance().getReference("listings");
+//
+//        // Retrieve the city passed from MainActivity
+//        userCity = getIntent().getStringExtra("userCity");
+//
+//        // Check if the city is received properly
+//        if (userCity != null && !userCity.isEmpty()) {
+//            textViewCity.setText("This item will be listed in: " + userCity);  // Set full text dynamically
+//        } else {
+//            textViewCity.setText("This item will be listed in: City not available");  // Fallback text
+//        }
+//
+//        buttonUpload.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                uploadListing();
+//            }
+//        });
+//
+//        buttonTakePhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                if(intent.resolveActivity(getPackageManager()) != null){
+//                    startActivityForResult(intent, CAMERA_ACTION);
+//
+//                }else{
+//                    Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//
+//
+//        buttonSelectImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                selectImage();
+//            }
+//        });
+//    }
 
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -211,6 +249,9 @@ public class CreateListing extends AppCompatActivity {
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("image", file.getName(), fileBody)
                 .build();
+
+        // Log the Basic Auth header value to check if it's correctly formatted
+        Log.d("UploadImage", "Authorization Header: " + BASIC_AUTH);
 
         // Create the HTTP request with authorization header using BASIC_AUTH
         Request request = new Request.Builder()
@@ -309,6 +350,8 @@ public class CreateListing extends AppCompatActivity {
         Log.e("UploadImage", "Failed response from server: " + response.code() + " " + responseBody);
         runOnUiThread(() -> Toast.makeText(CreateListing.this, "Error: " + response.code() + " " + responseBody, Toast.LENGTH_LONG).show());
     }
+
+
 
 //    private String getPathFromUri(Context context, Uri uri) {
 //        String result = null;
