@@ -17,6 +17,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.FirebaseApp;
+
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -63,12 +65,10 @@ public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnIt
                 Intent intent = new Intent(SwipeActivity.this, CreateListing.class);
                 startActivity(intent);
                 return true;
-            } else if (item.getItemId() == R.id.nav_logout) {
-                // Logout user
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(SwipeActivity.this, Login.class);
-                startActivity(intent);
+            } else if (item.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(SwipeActivity.this, Profile.class));
                 finish();
+//                logoutUser();
                 return true;
             }
             return false;

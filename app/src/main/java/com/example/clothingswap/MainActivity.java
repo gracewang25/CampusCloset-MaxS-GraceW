@@ -5,16 +5,14 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -45,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FusedLocationProviderClient fusedLocationClient;
     private final int REQUEST_LOCATION_PERMISSION = 1;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     private String userCity;
 
@@ -93,8 +92,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "City not determined yet. Please wait or try again.", Toast.LENGTH_SHORT).show();
                 }
                 return true;
-            } else if (id == R.id.nav_logout) {
-                logoutUser();
+            } else if (id == R.id.nav_profile) {
+                startActivity(new Intent(MainActivity.this, Profile.class));
+                finish();
+//                logoutUser();
                 return true;
             }
 
@@ -112,7 +113,16 @@ public class MainActivity extends AppCompatActivity {
             // startActivity(new Intent(getApplicationContext(), SwipeActivity.class));
             // finish();
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+
     }
+
+
 
     private void retrieveListings() {
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -173,6 +183,13 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
             }
+        }else if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE){
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted. You can continue accessing the content provider or media files
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+
         }
     }
-}

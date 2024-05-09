@@ -23,6 +23,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Clothingswap"
         tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.clothingswap.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <activity android:name=".Profile"
+            android:exported="false"/>
+
+
         <activity
             android:name=".CreateListing"
             android:exported="false" />
