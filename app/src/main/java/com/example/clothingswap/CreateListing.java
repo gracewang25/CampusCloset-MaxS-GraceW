@@ -102,12 +102,14 @@ public class CreateListing extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
-        } else if(requestCode == CAMERA_ACTION && resultCode == RESULT_OK && data != null){
-            Bundle bundle = data.getExtras();
-            Bitmap finalPhoto =  (Bitmap) bundle.get("");
-            imageView.setImageBitmap(finalPhoto);
+        } else if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK && data != null) {
+            // Get the photo as a Bitmap
+            selectedImageUri = data.getData();
+            imageView.setImageURI(selectedImageUri);
         }
     }
+
+
     @Override
     public void onBackPressed() {
         // Create an Intent to start MainActivity
