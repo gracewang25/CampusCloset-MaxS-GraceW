@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         bottomNav = findViewById(R.id.bottom_navigation);
-        searchView = findViewById(R.id.searchView);
-
 
 
         photoGrid = findViewById(R.id.photoGrid);
@@ -72,7 +70,27 @@ public class MainActivity extends AppCompatActivity {
         listingAdapter = new ListingAdapter(listings);
         photoGrid.setAdapter(listingAdapter);
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
-        retrieveListings();
+        retrieveListings("");
+
+        searchView = findViewById(R.id.searchView);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                retrieveListings(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                retrieveListings(newText);
+                return true;
+            }
+        });
+
+        // Initial retrieval of listings with an empty search query
+        retrieveListings("");
+
 
         bottomNav.setSelectedItemId(R.id.nav_home);
 
@@ -131,14 +149,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void retrieveListings() {
+    private void retrieveListings(String searchQuery) {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listings.clear();
                 for (DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
-                    listings.add(listing);
+                    if (searchQuery.isEmpty() || listing.getTags().toLowerCase().contains(searchQuery.toLowerCase())) {
+                        listings.add(listing);
+                    }
                 }
                 listingAdapter.notifyDataSetChanged();
             }
