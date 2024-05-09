@@ -51,11 +51,13 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="556dp"
         android:hint="Tags (comma-separated)"
-        android:padding="5dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Button for selecting image -->
 
     <Button
         android:id="@+id/buttonSelectImage"
@@ -66,6 +68,7 @@
         android:layout_marginEnd="140dp"
         android:layout_marginBottom="177dp"
         android:text="Select Image"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,13 +82,13 @@
         android:layout_marginTop="170dp"
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="261dp"
+        android:padding="5dp"
         android:src="@drawable/placeholder_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonUpload"
