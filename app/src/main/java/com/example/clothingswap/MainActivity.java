@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void retrieveListings(String searchQuery) {
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

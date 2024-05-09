@@ -116,6 +116,7 @@ public class CreateListing extends AppCompatActivity {
         }
 
         buttonUpload.setOnClickListener(v -> uploadListing());
+
         buttonTakePhoto.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             selectedImageUri = getPhotoFileUri();  // Get the file URI
@@ -143,6 +144,7 @@ public class CreateListing extends AppCompatActivity {
     }
 
 
+
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -153,17 +155,25 @@ public class CreateListing extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ((requestCode == PICK_IMAGE_REQUEST) && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK) {
+            if (selectedImageUri != null) {
+                imageView.setImageURI(selectedImageUri);
+                uploadImageToImagga(selectedImageUri);
+            } else {
+                Toast.makeText(this, "Error capturing image.", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
-            uploadImageToImagga(selectedImageUri);  // Trigger the upload and tagging process
-        }else if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK) {
-            imageView.setImageURI(selectedImageUri);
-            uploadImageToImagga(selectedImageUri);  // Trigger the upload and tagging process
+            uploadImageToImagga(selectedImageUri);
         } else {
             Toast.makeText(this, "Failed to get the image.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     private void uploadImageToImagga(Uri imageUri) {
