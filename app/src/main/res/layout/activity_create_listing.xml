@@ -86,12 +86,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    "<TextView
         android:id="@+id/textViewCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="464dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="460dp"
         android:padding="8dp"
         android:text="This item will be listed in: "
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -102,9 +102,14 @@
         android:id="@+id/buttonUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="158dp"
+        android:layout_marginTop="623dp"
+        android:layout_marginEnd="160dp"
         android:layout_marginBottom="60dp"
         android:text="Upload"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="158dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -85,6 +85,15 @@ public class CreateListing extends AppCompatActivity {
             imageView.setImageURI(selectedImageUri);
         }
     }
+    @Override
+    public void onBackPressed() {
+        // Create an Intent to start MainActivity
+        super.onBackPressed();
+        Intent intent = new Intent(CreateListing.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // This flag ensures all other activities on top are cleared.
+        startActivity(intent);
+        finish(); // Finish CreateListing to remove it from the stack
+    }
 
     private void uploadListing() {
         // Get the item name and tags from EditText fields

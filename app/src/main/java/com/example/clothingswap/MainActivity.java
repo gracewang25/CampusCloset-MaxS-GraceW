@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         bottomNav = findViewById(R.id.bottom_navigation);
+
         photoGrid = findViewById(R.id.photoGrid);
         photoGrid.setLayoutManager(new GridLayoutManager(this, 3));
         listings = new ArrayList<>();
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         photoGrid.setAdapter(listingAdapter);
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
         retrieveListings();
+
+        bottomNav.setSelectedItemId(R.id.nav_home);
 
         // Navigation setup using if-else
         bottomNav.setOnItemSelectedListener(item -> {
