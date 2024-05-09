@@ -147,6 +147,10 @@ public class Profile extends AppCompatActivity {
                 startActivity(new Intent(Profile.this, Profile.class));
                 finish();
                 return true;
+            } else if (item.getItemId() == R.id.nav_swipe) {
+            startActivity(new Intent(Profile.this, SwipeActivity.class));
+            finish();
+            return true;
             }
             return false;
         });
