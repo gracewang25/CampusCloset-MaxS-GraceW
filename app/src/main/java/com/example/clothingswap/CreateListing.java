@@ -39,8 +39,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import okhttp3.Call;
@@ -57,6 +64,8 @@ public class CreateListing extends AppCompatActivity {
 
     private static final String API_KEY = "acc_382bef3758b23c2";
     private static final String API_SECRET = "792e181bda7d9bcf014607680f2c23c3";
+
+
     private static final String BASIC_AUTH = "Basic " + Base64.encodeToString((API_KEY + ":" + API_SECRET).getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
 
     EditText editTextItemName, editTextTags;
@@ -232,58 +241,78 @@ public class CreateListing extends AppCompatActivity {
 //    }
 
     private void uploadImageToImagga(Uri imageUri) {
-        // First, ensure the path conversion from URI is handled correctly
-        File file = new File(getPathFromUri(this, imageUri));
-        if (!file.exists()) {
-            runOnUiThread(() -> Toast.makeText(CreateListing.this, "File does not exist.", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Prepare the OkHttpClient and MediaType
-        OkHttpClient client = new OkHttpClient();
-        MediaType mediaType = MediaType.parse("image/jpeg");
-        RequestBody fileBody = RequestBody.create(mediaType, file);
-
-        // Prepare the request body with the image file
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("image", file.getName(), fileBody)
-                .build();
-
-        // Log the Basic Auth header value to check if it's correctly formatted
-        Log.d("UploadImage", "Authorization Header: " + BASIC_AUTH);
-
-        // Create the HTTP request with authorization header using BASIC_AUTH
-        Request request = new Request.Builder()
-                .url("https://api.imagga.com/v2/uploads")
-                .post(requestBody)
-                .addHeader("Authorization", BASIC_AUTH)
-                .build();
-
-        // Execute the call and handle response
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseString = response.body().string();
-                    try {
-                        JSONObject jsonResponse = new JSONObject(responseString);
-                        String uploadId = jsonResponse.getJSONObject("result").getString("upload_id");
-                        fetchTagsFromImagga(uploadId);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    handleErrorResponse(response);
+        new Thread(() -> {
+            try {
+                File file = new File(getPathFromUri(this, imageUri));
+                if (!file.exists()) {
+                    runOnUiThread(() -> Toast.makeText(CreateListing.this, "File does not exist.", Toast.LENGTH_SHORT).show());
+                    return;
                 }
-            }
 
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("UploadImage", "API request failed 1: " + e.getMessage(), e);
-                runOnUiThread(() -> Toast.makeText(CreateListing.this, "API request failed 1: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                // Convert file to byte array
+                FileInputStream fileInputStream = new FileInputStream(file);
+                byte[] bytesArray = new byte[(int) file.length()];
+                fileInputStream.read(bytesArray);
+                fileInputStream.close();
+
+                String credentialsToEncode = "acc_382bef3758b23c2" + ":" + "792e181bda7d9bcf014607680f2c23c3";
+                String basicAuth = "Basic " + Base64.encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+
+                URL url = new URL("https://api.imagga.com/v2/uploads");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                // Set up the header
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Authorization", basicAuth);
+                connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
+
+                connection.setDoOutput(true);
+
+                DataOutputStream request = new DataOutputStream(connection.getOutputStream());
+
+                request.writeBytes("------WebKitFormBoundary7MA4YWxkTrZu0gW\r\n");
+                request.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + file.getName() + "\"\r\n");
+                request.writeBytes("Content-Type: image/jpeg\r\n\r\n");
+                request.write(bytesArray);
+                request.writeBytes("\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--\r\n");
+                request.flush();
+                request.close();
+
+                int responseCode = connection.getResponseCode();
+                InputStream inputStream;
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = connection.getInputStream();
+                    String response = convertStreamToString(inputStream);
+
+                    // Extract upload ID and fetch tags
+                    String uploadId = extractUploadId(response);
+                    fetchTagsFromImagga(uploadId);
+                } else {
+                    inputStream = connection.getErrorStream();
+                    String response = convertStreamToString(inputStream);
+                    Log.e("UploadImage", "Failed response from server: " + responseCode + " " + response);
+                    runOnUiThread(() -> Toast.makeText(CreateListing.this, "Error: " + responseCode + " " + response, Toast.LENGTH_LONG).show());
+                }
+            } catch (Exception e) {
+                Log.e("UploadImage", "Exception in making HTTP request: " + e.getMessage(), e);
+                runOnUiThread(() -> Toast.makeText(CreateListing.this, "Exception in making HTTP request: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
-        });
+        }).start();
+    }
+
+    private String convertStreamToString(InputStream is) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append('\n');
+        }
+        return sb.toString();
+    }
+
+    private String extractUploadId(String jsonResponse) throws JSONException {
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        return jsonObject.getJSONObject("result").getString("upload_id");
     }
 
     private void fetchTagsFromImagga(String uploadId) {
@@ -390,10 +419,7 @@ public class CreateListing extends AppCompatActivity {
         return null;
     }
 
-    private String extractUploadId(String jsonResponse) throws JSONException {
-        JSONObject jsonObject = new JSONObject(jsonResponse);
-        return jsonObject.getJSONObject("result").getString("upload_id");
-    }
+
 
 
     @Override
