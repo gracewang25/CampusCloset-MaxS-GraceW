@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_profile) {
                 startActivity(new Intent(MainActivity.this, Profile.class));
                 finish();
-//                logoutUser();
                 return true;
             }
 
@@ -171,12 +170,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void logoutUser() {
-        auth.signOut();
-        Intent intent = new Intent(getApplicationContext(), Login.class);
-        startActivity(intent);
-        finish();
-    }
 
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

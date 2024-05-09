@@ -39,7 +39,7 @@ public class Profile extends AppCompatActivity {
     private EditText editTextName;
     private List<Listing> listings;
     private TextView textViewEmail;
-    private Button buttonEditSave;
+    private Button buttonEditSave, buttonLogout;
     private boolean isEditing = false;
     private ListingAdapter listingAdapter;
     private RecyclerView recyclerViewListings;
@@ -59,6 +59,7 @@ public class Profile extends AppCompatActivity {
         editTextName = findViewById(R.id.editTextName);
         textViewEmail = findViewById(R.id.textViewEmail);
         buttonEditSave = findViewById(R.id.buttonEditSave);
+        buttonLogout = findViewById(R.id.buttonLogout);
         recyclerViewListings = findViewById(R.id.recyclerViewListings);
         bottomNav = findViewById(R.id.bottom_navigation);
         auth = FirebaseAuth.getInstance();
@@ -66,6 +67,14 @@ public class Profile extends AppCompatActivity {
         setupRecyclerView();
         loadUserProfile();
         retrieveUserListings();
+
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
 
         listingAdapter.setOnItemClickListener(new ListingAdapter.OnItemClickListener() {
             @Override
@@ -150,6 +159,13 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    private void logout() {
+        auth.signOut();
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void setupRecyclerView() {
         listings = new ArrayList<>();
         listingAdapter = new ListingAdapter(listings);
@@ -214,4 +230,6 @@ public class Profile extends AppCompatActivity {
             }
         }
     }
+
+
 }
