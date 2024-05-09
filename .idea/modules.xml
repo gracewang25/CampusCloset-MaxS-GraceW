@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CampusCloset-MaxS-GraceW.iml" filepath="$PROJECT_DIR$/.idea/CampusCloset-MaxS-GraceW.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CampusCloset-MaxS-GraceW.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CampusClosetMaxSGraceW.CampusCloset-MaxS-GraceW.iml" filepath="$PROJECT_DIR$/.idea/modules/CampusClosetMaxSGraceW.CampusCloset-MaxS-GraceW.iml" />
     </modules>
   </component>
 </project>
