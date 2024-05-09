@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 // Assuming MainActivity is this activity, you might refresh or do nothing
                 // Refreshing could mean just reloading data or resetting certain views
                 // If necessary, you can call a method here that resets your data or UI
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
+                finish();
                 return true;
             } else if (id == R.id.nav_swipe) {
                 startActivity(new Intent(MainActivity.this, SwipeActivity.class));

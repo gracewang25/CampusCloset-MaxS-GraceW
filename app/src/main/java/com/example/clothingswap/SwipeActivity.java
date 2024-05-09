@@ -45,10 +45,19 @@ public class SwipeActivity extends AppCompatActivity implements CardAdapter.OnIt
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
 
+        //setting the appropriate state for buttons
+        bottomNavigationView.setLabelVisibilityMode(BottomNavigationView.LABEL_VISIBILITY_LABELED);
+        bottomNavigationView.setSelectedItemId(R.id.nav_swipe);
+
         retrieveListings();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_add) {
+            if (item.getItemId() == R.id.nav_home) {
+                // Navigate to Home
+                startActivity(new Intent(SwipeActivity.this, MainActivity.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.nav_add) {
                 // Navigate to AddItemActivity
                 Intent intent = new Intent(SwipeActivity.this, CreateListing.class);
                 startActivity(intent);
