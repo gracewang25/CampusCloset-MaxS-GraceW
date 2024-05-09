@@ -1,6 +1,7 @@
 package com.example.clothingswap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +21,11 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ListingV
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
+        void onItemClick(int position);    }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
-
     public ListingAdapter(List<Listing> listings) {
         this.listings = listings;
     }
@@ -38,7 +37,6 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ListingV
         View view = LayoutInflater.from(context).inflate(R.layout.grid_item_layout, parent, false);
         return new ListingViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ListingViewHolder holder, int position) {
         Listing listing = listings.get(position);
@@ -48,7 +46,21 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ListingV
 
         holder.trashIcon.setVisibility(listing.isSelected() ? View.VISIBLE : View.GONE);
         holder.imageViewGrid.setColorFilter(listing.isSelected() ? Color.argb(150, 0, 0, 0) : Color.TRANSPARENT);
-    }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Listing listing = listings.get(position);
+                    Intent intent = new Intent(context, ItemDetailsActivity.class);
+                    intent.putExtra("itemName", listing.getItemName());
+                    intent.putExtra("itemTags", listing.getTags());
+                    intent.putExtra("itemImageUri", listing.getImageUri());
+                    context.startActivity(intent);
+                }
+            }
+        });    }
 
     @Override
     public int getItemCount() {
