@@ -70,11 +70,16 @@ public class MainActivity extends AppCompatActivity {
         // Navigation setup using if-else
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.nav_swipe) {
+
+            if (id == R.id.nav_home) {
+                // Assuming MainActivity is this activity, you might refresh or do nothing
+                // Refreshing could mean just reloading data or resetting certain views
+                // If necessary, you can call a method here that resets your data or UI
+                return true;
+            } else if (id == R.id.nav_swipe) {
                 startActivity(new Intent(MainActivity.this, SwipeActivity.class));
                 return true;
             } else if (id == R.id.nav_add) {
-                // Check if the city is known before starting CreateListing
                 if (userCity != null && !userCity.isEmpty()) {
                     Intent intent = new Intent(MainActivity.this, CreateListing.class);
                     intent.putExtra("userCity", userCity); // Pass the city as an extra
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 logoutUser();
                 return true;
             }
+
             return false;
         });
 
