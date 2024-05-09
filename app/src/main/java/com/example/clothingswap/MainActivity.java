@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private final int REQUEST_LOCATION_PERMISSION = 1;
 
+    private String userCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,12 +123,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLocation() {
-        // Check permissions for location access
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request permissions if not already granted
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         } else {
-            // Permissions are already granted, perform the location access or other actions
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
@@ -136,9 +135,8 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
                                 if (addresses != null && !addresses.isEmpty()) {
-                                    String city = addresses.get(0).getLocality();
-                                    // Use city information as needed
-                                    Toast.makeText(getApplicationContext(), "You are in " + city, Toast.LENGTH_LONG).show();
+                                    userCity = addresses.get(0).getLocality();  // Store the city in the member variable
+                                    Toast.makeText(getApplicationContext(), "You are in " + userCity, Toast.LENGTH_LONG).show();
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();

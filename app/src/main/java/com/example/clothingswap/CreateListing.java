@@ -25,6 +25,7 @@ public class CreateListing extends AppCompatActivity {
     DatabaseReference databaseReference;
     ImageView imageView;
     Uri selectedImageUri;
+    String userCity;
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -40,6 +41,9 @@ public class CreateListing extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
+
+        // Retrieve the city passed from MainActivity
+        userCity = getIntent().getStringExtra("userCity");
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +87,12 @@ public class CreateListing extends AppCompatActivity {
             return;
         }
 
-        // Upload the listing details and image URI to Firebase
+        // Upload the listing details, image URI, and city to Firebase
         String listingId = databaseReference.push().getKey();
-        Listing listing = new Listing(listingId, itemName, tags, selectedImageUri.toString());
+        Listing listing = new Listing(listingId, itemName, tags, selectedImageUri.toString(), userCity); // Include city
         databaseReference.child(listingId).setValue(listing);
 
         Toast.makeText(this, "Listing uploaded successfully", Toast.LENGTH_SHORT).show();
         finish(); // Close the activity after uploading
     }
 }
-

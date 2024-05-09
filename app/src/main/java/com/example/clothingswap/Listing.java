@@ -6,21 +6,22 @@ public class Listing {
     private String itemName;
     private String tags;
     private String imageUri;
+    private String city; // Field for storing city
 
     // Default constructor (required for Firebase)
     public Listing() {
     }
 
     // Constructor with parameters
-    public Listing(String listingId, String itemName, String tags, String imageUri) {
+    public Listing(String listingId, String itemName, String tags, String imageUri, String city) { // Include city in parameters
         this.listingId = listingId;
         this.itemName = itemName;
         this.tags = tags;
         this.imageUri = imageUri;
+        this.city = city; // Initialize city
     }
 
     // Getters and setters
-    // Make sure to include getters and setters for all fields
     public String getListingId() {
         return listingId;
     }
@@ -51,5 +52,13 @@ public class Listing {
 
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public String getCity() { // Getter for city
+        return city;
+    }
+
+    public void setCity(String city) { // Setter for city
+        this.city = city;
     }
 }
