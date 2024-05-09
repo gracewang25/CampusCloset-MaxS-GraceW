@@ -1,6 +1,5 @@
 package com.example.clothingswap;
 
-// Listing.java
 public class Listing {
     private String listingId;
     private String itemName;
@@ -8,12 +7,12 @@ public class Listing {
     private String imageUri;
     private String city;
     private String userEmail;
+    private boolean isSelected;
 
-    // Default constructor required for calls to DataSnapshot.getValue(Listing.class)
     public Listing() {
+        // Default constructor required for Firebase
     }
 
-    // Constructor with parameters
     public Listing(String listingId, String itemName, String tags, String imageUri, String city, String userEmail) {
         this.listingId = listingId;
         this.itemName = itemName;
@@ -21,19 +20,9 @@ public class Listing {
         this.imageUri = imageUri;
         this.city = city;
         this.userEmail = userEmail;
+        this.isSelected = false;
     }
 
-    // Getters and setters
-    // Include getters and setters for email
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    // Getters and setters
     public String getListingId() {
         return listingId;
     }
@@ -66,11 +55,27 @@ public class Listing {
         this.imageUri = imageUri;
     }
 
-    public String getCity() { // Getter for city
+    public String getCity() {
         return city;
     }
 
-    public void setCity(String city) { // Setter for city
+    public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.LocationServices;
@@ -36,9 +37,7 @@ import java.util.List;
 public class Profile extends AppCompatActivity {
 
     private EditText editTextName;
-
     private List<Listing> listings;
-
     private TextView textViewEmail;
     private Button buttonEditSave;
     private boolean isEditing = false;
@@ -46,21 +45,15 @@ public class Profile extends AppCompatActivity {
     private RecyclerView recyclerViewListings;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
-
-
-
     BottomNavigationView bottomNav;
     FirebaseAuth auth;
     FirebaseUser user;
-
     DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
         editTextName = findViewById(R.id.editTextName);
@@ -74,20 +67,50 @@ public class Profile extends AppCompatActivity {
         loadUserProfile();
         retrieveUserListings();
 
+        listingAdapter.setOnItemClickListener(new ListingAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Listing selectedListing = listings.get(position);
+                if (selectedListing.isSelected()) {
+                    deleteListing(selectedListing);
+                } else {
+                    selectedListing.setSelected(true);
+                    listingAdapter.notifyItemChanged(position);
+                }
+            }
+        });
 
+        recyclerViewListings.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                    View childView = rv.findChildViewUnder(e.getX(), e.getY());
+                    if (childView == null) {
+                        deselectAllListings();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
+        ConstraintLayout profileLayout = findViewById(R.id.profileLayout);
+        profileLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deselectAllListings();
+            }
+        });
 
         buttonEditSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isEditing) {
-                    // Allow editing of the EditText
                     editTextName.setEnabled(true);
                     editTextName.requestFocus();
                     buttonEditSave.setText("Save Changes");
                     isEditing = true;
                 } else {
-                    // Save changes to Firebase or SharedPreferences
                     editTextName.setEnabled(false);
                     buttonEditSave.setText("Edit");
                     isEditing = false;
@@ -97,7 +120,6 @@ public class Profile extends AppCompatActivity {
         });
 
         if (user != null) {
-            // If the user is signed in, display their email
             textViewEmail.setText(user.getEmail());
         }
 
@@ -105,23 +127,21 @@ public class Profile extends AppCompatActivity {
 
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
-                // Navigate to Home
                 startActivity(new Intent(Profile.this, MainActivity.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.nav_add) {
-                // Navigate to AddItemActivity
                 Intent intent = new Intent(Profile.this, CreateListing.class);
                 startActivity(intent);
                 return true;
             } else if (item.getItemId() == R.id.nav_profile) {
                 startActivity(new Intent(Profile.this, Profile.class));
                 finish();
-//                logoutUser();
                 return true;
             }
             return false;
         });
+
         if (ContextCompat.checkSelfPermission(Profile.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(Profile.this,
@@ -129,8 +149,6 @@ public class Profile extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
     }
-
-
 
     private void setupRecyclerView() {
         listings = new ArrayList<>();
@@ -162,26 +180,38 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    private void deleteListing(Listing listing) {
+        DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference("listings").child(listing.getListingId());
+        listingRef.removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    listings.remove(listing);
+                    listingAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(Profile.this, "Failed to delete listing", Toast.LENGTH_SHORT).show();
+                });
+    }
 
+    private void deselectAllListings() {
+        for (Listing listing : listings) {
+            listing.setSelected(false);
+        }
+        listingAdapter.notifyDataSetChanged();
+    }
 
     private void loadUserProfile() {
-        // Here you would typically pull this information from Firebase or SharedPreferences
-        // For now, let's assume the user is named John Doe with email placeholder
         editTextName.setText("John Doe");
-//        editTextEmail.setText("john.doe@example.com");
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-     if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted. You can continue accessing the content provider or media files
             } else {
-//                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                // Permission denied
             }
         }
-
     }
 }
-

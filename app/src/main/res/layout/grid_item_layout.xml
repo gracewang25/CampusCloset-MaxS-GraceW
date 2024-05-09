@@ -1,8 +1,6 @@
-<!-- Example layout for grid item -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageViewGrid"
@@ -10,5 +8,12 @@
         android:layout_height="250dp"
         android:scaleType="centerCrop" />
 
-    <!-- Add other views for displaying additional information about the listing -->
-</LinearLayout>
+    <ImageView
+        android:id="@+id/trashIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/trash_icon"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+</FrameLayout>
