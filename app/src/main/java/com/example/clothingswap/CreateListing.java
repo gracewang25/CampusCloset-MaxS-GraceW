@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -42,8 +43,16 @@ public class CreateListing extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
 
+        TextView textViewCityName = findViewById(R.id.textViewCityName);
+
+
         // Retrieve the city passed from MainActivity
         userCity = getIntent().getStringExtra("userCity");
+        if (userCity != null && !userCity.isEmpty()) {
+            textViewCityName.setText(userCity); // Display the city name
+        } else {
+            textViewCityName.setText("City not available"); // Default text if city is not provided
+        }
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
