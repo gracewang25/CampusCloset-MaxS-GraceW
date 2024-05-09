@@ -352,7 +352,8 @@ public class CreateListing extends AppCompatActivity {
         databaseReference.child(listingId).setValue(listing);
 
         Toast.makeText(this, "Listing uploaded successfully", Toast.LENGTH_SHORT).show();
-        finish(); // Close the activity after uploading
+        startActivity(new Intent(CreateListing.this, MainActivity.class));
+        finish();
     }
 
     // Retrofit interfaces
