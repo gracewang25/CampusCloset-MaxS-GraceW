@@ -127,27 +127,25 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         } else {
             // Permissions are already granted, perform the location access or other actions
-            getLocation();
-        }
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, location -> {
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                            if (addresses != null && !addresses.isEmpty()) {
-                                String city = addresses.get(0).getLocality();
-                                // Use city information as needed
-                                Toast.makeText(getApplicationContext(), "You are in " + city, Toast.LENGTH_LONG).show();
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                            try {
+                                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                                if (addresses != null && !addresses.isEmpty()) {
+                                    String city = addresses.get(0).getLocality();
+                                    // Use city information as needed
+                                    Toast.makeText(getApplicationContext(), "You are in " + city, Toast.LENGTH_LONG).show();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
+        }
     }
 
     @Override
