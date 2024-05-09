@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- header -->
+    <!-- TextView for displaying user details (e.g., email) -->
+
     <ImageView
         android:id="@+id/imageViewTitle"
-        android:layout_width="218dp"
-        android:layout_height="93dp"
+        android:layout_width="172dp"
+        android:layout_height="59dp"
         android:layout_marginStart="96dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="97dp"
@@ -16,11 +18,10 @@
         android:src="@drawable/textlogo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-    <!-- TextView for displaying user details (e.g., email) -->
+
     <TextView
         android:id="@+id/user_details"
         android:layout_width="wrap_content"
@@ -49,7 +50,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.515" />
+        app:layout_constraintVertical_bias="0.617" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/photoGrid"

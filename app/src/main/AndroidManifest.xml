@@ -21,6 +21,8 @@
         <activity
             android:name=".Register"
             android:exported="false" />
+
+<!--LOGIN ACTIVITY -->
         <activity
             android:name=".Login"
             android:exported="true">
@@ -30,9 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--MAIN ACTIVITY-->
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
