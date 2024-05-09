@@ -35,23 +35,24 @@ public class CreateListing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_listing);
 
+        // Initialize components
         editTextItemName = findViewById(R.id.editTextItemName);
         editTextTags = findViewById(R.id.editTextTags);
         buttonUpload = findViewById(R.id.buttonUpload);
         buttonSelectImage = findViewById(R.id.buttonSelectImage);
         imageView = findViewById(R.id.imageView);
+        TextView textViewCity = findViewById(R.id.textViewCity);  // Reference to the TextView
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
 
-        TextView textViewCityName = findViewById(R.id.textViewCityName);
-
-
         // Retrieve the city passed from MainActivity
         userCity = getIntent().getStringExtra("userCity");
+
+        // Check if the city is received properly
         if (userCity != null && !userCity.isEmpty()) {
-            textViewCityName.setText(userCity); // Display the city name
+            textViewCity.setText("This item will be listed in: " + userCity);  // Set full text dynamically
         } else {
-            textViewCityName.setText("City not available"); // Default text if city is not provided
+            textViewCity.setText("This item will be listed in: City not available");  // Fallback text
         }
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
