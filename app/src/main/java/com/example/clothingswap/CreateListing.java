@@ -352,7 +352,7 @@ public class CreateListing extends AppCompatActivity {
         databaseReference.child(listingId).setValue(listing);
 
         Toast.makeText(this, "Listing uploaded successfully", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(CreateListing.this, MainActivity.class));
+        startActivity(new Intent(CreateListing.this, Profile.class));
         finish();
     }
 
