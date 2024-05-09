@@ -310,24 +310,41 @@ public class CreateListing extends AppCompatActivity {
         runOnUiThread(() -> Toast.makeText(CreateListing.this, "Error: " + response.code() + " " + responseBody, Toast.LENGTH_LONG).show());
     }
 
+//    private String getPathFromUri(Context context, Uri uri) {
+//        String result = null;
+//        if (uri.getScheme().equals("content")) {
+//            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+//            try {
+//                if (cursor != null && cursor.moveToFirst()) {
+//                    int idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+//                    result = cursor.getString(idx);
+//                }
+//            } finally {
+//                if (cursor != null) {
+//                    cursor.close();
+//                }
+//            }
+//        } else if (uri.getScheme().equals("file")) {
+//            result = uri.getPath();
+//        }
+//        return result;
+//    }
+
     private String getPathFromUri(Context context, Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-            try {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = { MediaStore.Images.Media.DATA };
+            try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
-                    int idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                    result = cursor.getString(idx);
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    return cursor.getString(column_index);
                 }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+            } catch (Exception e) {
+                Log.e("UploadImage", "Failed to get path from URI", e);
             }
-        } else if (uri.getScheme().equals("file")) {
-            result = uri.getPath();
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
         }
-        return result;
+        return null;
     }
 
     private String extractUploadId(String jsonResponse) throws JSONException {
