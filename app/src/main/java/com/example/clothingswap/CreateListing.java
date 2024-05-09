@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -73,7 +75,9 @@ public class CreateListing extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_IMAGE_PERMISSION = 1;
 
+
     private ImaggaService imaggaService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,18 +114,32 @@ public class CreateListing extends AppCompatActivity {
         }
 
         buttonUpload.setOnClickListener(v -> uploadListing());
-        buttonTakePhoto.setOnClickListener(v -> takePhoto());
+        buttonTakePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            selectedImageUri = getPhotoFileUri();  // Get the file URI
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);  // Set the URI as the output
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, CAMERA_ACTION);
+            } else {
+                Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         buttonSelectImage.setOnClickListener(v -> selectImage());
     }
 
-    private void takePhoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, CAMERA_ACTION);
-        } else {
-            Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
-        }
+
+    private Uri getPhotoFileUri() {
+        // Create a unique filename
+        String fileName = "photo_" + System.currentTimeMillis();
+        // Get safe storage directory for photos
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File photoFile = new File(storageDir, fileName);
+
+        // Return file provider URI for the file
+        return FileProvider.getUriForFile(this, "com.example.clothingswap.fileprovider", photoFile);
     }
+
 
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -133,14 +151,18 @@ public class CreateListing extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ((requestCode == PICK_IMAGE_REQUEST || requestCode == CAMERA_ACTION) && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if ((requestCode == PICK_IMAGE_REQUEST) && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
-            uploadImageToImagga(selectedImageUri);
+            uploadImageToImagga(selectedImageUri);  // Trigger the upload and tagging process
+        }else if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK) {
+            imageView.setImageURI(selectedImageUri);
+            uploadImageToImagga(selectedImageUri);  // Trigger the upload and tagging process
         } else {
             Toast.makeText(this, "Failed to get the image.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void uploadImageToImagga(Uri imageUri) {
         File file = new File(getPathFromUri(this, imageUri));
