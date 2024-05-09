@@ -65,6 +65,7 @@ public class CreateListing extends AppCompatActivity {
     private static final String API_KEY = "acc_382bef3758b23c2";
     private static final String API_SECRET = "792e181bda7d9bcf014607680f2c23c3";
     private static final String BASIC_AUTH = "Basic YWNjXzM4MmJlZjM3NThiMjNjMjo3OTJlMTgxYmRhN2Q5YmNmMDE0NjA3NjgwZjJjMjNjMw==";
+    private static final String FILE_PROVIDER_AUTHORITY = "com.example.clothingswap.fileprovider";
 
     private EditText editTextItemName, editTextTags;
     private Button buttonUpload, buttonSelectImage, buttonTakePhoto;
@@ -72,6 +73,7 @@ public class CreateListing extends AppCompatActivity {
     private ImageView imageView;
     private Uri selectedImageUri;
     private String userCity;
+    private Uri photoUri;
 
     private static final int CAMERA_ACTION = 1;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -119,12 +121,16 @@ public class CreateListing extends AppCompatActivity {
 
         buttonTakePhoto.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            selectedImageUri = getPhotoFileUri();  // Get the file URI
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);  // Set the URI as the output
             if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, CAMERA_ACTION);
+                // Create a new file and retrieve its URI
+                File photoFile = getPhotoFile();
+                if (photoFile != null) {
+                    selectedImageUri = FileProvider.getUriForFile(this, FILE_PROVIDER_AUTHORITY, photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
+                    startActivityForResult(intent, CAMERA_ACTION);
+                }
             } else {
-                Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateListing.this, "No camera app available", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -132,15 +138,17 @@ public class CreateListing extends AppCompatActivity {
     }
 
 
-    private Uri getPhotoFileUri() {
-        // Create a unique filename
-        String fileName = "photo_" + System.currentTimeMillis();
-        // Get safe storage directory for photos
+    private File getPhotoFile() {
+        // Create a unique file name based on timestamp
+        String fileName = "photo_" + System.currentTimeMillis() + ".jpg";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File photoFile = new File(storageDir, fileName);
 
-        // Return file provider URI for the file
-        return FileProvider.getUriForFile(this, "com.example.clothingswap.fileprovider", photoFile);
+        if (storageDir != null) {
+            return new File(storageDir, fileName);
+        } else {
+            Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
+            return null;
+        }
     }
 
 
@@ -155,7 +163,13 @@ public class CreateListing extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK) {
+
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            imageView.setImageURI(selectedImageUri);
+            uploadImageToImagga(selectedImageUri);
+        } else if (requestCode == CAMERA_ACTION && resultCode == RESULT_OK && data != null && data.getData() != null) {
             if (selectedImageUri != null) {
                 imageView.setImageURI(selectedImageUri);
                 uploadImageToImagga(selectedImageUri);
@@ -163,14 +177,6 @@ public class CreateListing extends AppCompatActivity {
                 Toast.makeText(this, "Error capturing image.", Toast.LENGTH_SHORT).show();
             }
 
-        }
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            selectedImageUri = data.getData();
-            imageView.setImageURI(selectedImageUri);
-            uploadImageToImagga(selectedImageUri);
-        } else {
-            Toast.makeText(this, "Failed to get the image.", Toast.LENGTH_SHORT).show();
         }
     }
 
