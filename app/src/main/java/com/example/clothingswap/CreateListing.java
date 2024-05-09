@@ -1,6 +1,7 @@
 package com.example.clothingswap;
 import com.example.clothingswap.Listing;
 
+import android.Manifest;
 
 import android.content.Intent;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -52,6 +55,10 @@ import okhttp3.Response;
 
 public class CreateListing extends AppCompatActivity {
 
+    private static final String API_KEY = "acc_382bef3758b23c2";
+    private static final String API_SECRET = "792e181bda7d9bcf014607680f2c23c3";
+    private static final String BASIC_AUTH = "Basic " + Base64.encodeToString((API_KEY + ":" + API_SECRET).getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+
     EditText editTextItemName, editTextTags;
     Button buttonUpload, buttonSelectImage, buttonTakePhoto;
     DatabaseReference databaseReference;
@@ -64,19 +71,20 @@ public class CreateListing extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_PERMISSION = 1;
 
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private void requestImagePermission() {
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}, REQUEST_IMAGE_PERMISSION);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS}, REQUEST_IMAGE_PERMISSION);
             } else {
                 // Permission already granted
                 selectImage();
             }
         } else {
             // On older Android versions, continue using READ_EXTERNAL_STORAGE
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}, REQUEST_IMAGE_PERMISSION);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS}, REQUEST_IMAGE_PERMISSION);
             } else {
                 // Permission already granted
                 selectImage();
@@ -186,37 +194,44 @@ public class CreateListing extends AppCompatActivity {
 //    }
 
     private void uploadImageToImagga(Uri imageUri) {
-        File file = new File(getPathFromUri(this, imageUri)); // Convert Uri to file path
-        String credentials = "acc_your_account_id:your_api_key";
-        String basicAuth = Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+        // First, ensure the path conversion from URI is handled correctly
+        File file = new File(getPathFromUri(this, imageUri));
+        if (!file.exists()) {
+            runOnUiThread(() -> Toast.makeText(CreateListing.this, "File does not exist.", Toast.LENGTH_SHORT).show());
+            return;
+        }
 
+        // Prepare the OkHttpClient and MediaType
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("image/jpeg");
         RequestBody fileBody = RequestBody.create(mediaType, file);
 
+        // Prepare the request body with the image file
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("image", file.getName(), fileBody)
                 .build();
 
+        // Create the HTTP request with authorization header using BASIC_AUTH
         Request request = new Request.Builder()
                 .url("https://api.imagga.com/v2/uploads")
                 .post(requestBody)
-                .addHeader("Authorization", "Basic " + basicAuth)
+                .addHeader("Authorization", BASIC_AUTH)
                 .build();
 
+        // Execute the call and handle response
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseString = response.body().string();
-                    String uploadId = null; // Implement this method to parse JSON and extract upload_id
                     try {
-                        uploadId = extractUploadId(responseString);
+                        JSONObject jsonResponse = new JSONObject(responseString);
+                        String uploadId = jsonResponse.getJSONObject("result").getString("upload_id");
+                        fetchTagsFromImagga(uploadId);
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
-                    fetchTagsFromImagga(uploadId);
                 } else {
                     handleErrorResponse(response);
                 }
@@ -224,7 +239,8 @@ public class CreateListing extends AppCompatActivity {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> Toast.makeText(CreateListing.this, "API request failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                Log.e("UploadImage", "API request failed 1: " + e.getMessage(), e);
+                runOnUiThread(() -> Toast.makeText(CreateListing.this, "API request failed 1: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         });
     }
@@ -256,7 +272,7 @@ public class CreateListing extends AppCompatActivity {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                runOnUiThread(() -> Toast.makeText(CreateListing.this, "API request failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> Toast.makeText(CreateListing.this, "API request failed 2: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         });
     }
