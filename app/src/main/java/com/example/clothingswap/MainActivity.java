@@ -148,12 +148,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-<<<<<<< HEAD
 
     private void retrieveListings(String searchQuery) {
-=======
-    private void retrieveListings() {
->>>>>>> dbf6602 (fixing camera)
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
