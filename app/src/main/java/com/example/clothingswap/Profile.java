@@ -61,7 +61,6 @@ public class Profile extends AppCompatActivity {
         buttonEditSave = findViewById(R.id.buttonEditSave);
         recyclerViewListings = findViewById(R.id.recyclerViewListings);
         bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setSelectedItemId(R.id.nav_profile);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         setupRecyclerView();
