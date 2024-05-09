@@ -94,13 +94,13 @@
         android:id="@+id/textViewCityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="City: "
+        android:text="This item will be listed in: "
         android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/textViewCityName"
         app:layout_constraintTop_toBottomOf="@id/editTextTags"
         android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <TextView
         android:id="@+id/textViewCityName"
