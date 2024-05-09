@@ -216,7 +216,7 @@ public class Profile extends AppCompatActivity {
     }
 
     private void loadUserProfile() {
-        editTextName.setText("John Doe");
+        editTextName.setText("Please enter a Name");
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
