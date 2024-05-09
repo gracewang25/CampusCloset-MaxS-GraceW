@@ -3,8 +3,10 @@ import com.example.clothingswap.Listing;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,13 +24,15 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CreateListing extends AppCompatActivity {
 
     EditText editTextItemName, editTextTags;
-    Button buttonUpload, buttonSelectImage;
+    Button buttonUpload, buttonSelectImage, buttonTakePhoto;
     DatabaseReference databaseReference;
     ImageView imageView;
     Uri selectedImageUri;
     String userCity;
 
+    public static final int CAMERA_ACTION = 1;
     private static final int PICK_IMAGE_REQUEST = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class CreateListing extends AppCompatActivity {
         buttonUpload = findViewById(R.id.buttonUpload);
         buttonSelectImage = findViewById(R.id.buttonSelectImage);
         imageView = findViewById(R.id.imageView);
+        buttonTakePhoto = findViewById(R.id.buttonTakePhoto);
         TextView textViewCity = findViewById(R.id.textViewCity);  // Reference to the TextView
 
         databaseReference = FirebaseDatabase.getInstance().getReference("listings");
@@ -61,6 +66,20 @@ public class CreateListing extends AppCompatActivity {
                 uploadListing();
             }
         });
+
+        buttonTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(intent.resolveActivity(getPackageManager()) != null){
+                    startActivityForResult(intent, CAMERA_ACTION);
+
+                }else{
+                    Toast.makeText(CreateListing.this, "There is no app that supports this action", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         buttonSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +102,10 @@ public class CreateListing extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
+        } else if(requestCode == CAMERA_ACTION && resultCode == RESULT_OK && data != null){
+            Bundle bundle = data.getExtras();
+            Bitmap finalPhoto =  (Bitmap) bundle.get("");
+            imageView.setImageBitmap(finalPhoto);
         }
     }
     @Override
@@ -94,6 +117,8 @@ public class CreateListing extends AppCompatActivity {
         startActivity(intent);
         finish(); // Finish CreateListing to remove it from the stack
     }
+
+
 
     private void uploadListing() {
         // Get the item name and tags from EditText fields
