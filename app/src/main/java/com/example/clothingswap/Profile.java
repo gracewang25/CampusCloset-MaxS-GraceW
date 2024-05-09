@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -134,7 +135,7 @@ public class Profile extends AppCompatActivity {
     private void setupRecyclerView() {
         listings = new ArrayList<>();
         listingAdapter = new ListingAdapter(listings);
-        recyclerViewListings.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewListings.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerViewListings.setAdapter(listingAdapter);
     }
 
@@ -177,7 +178,7 @@ public class Profile extends AppCompatActivity {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted. You can continue accessing the content provider or media files
             } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
             }
         }
 

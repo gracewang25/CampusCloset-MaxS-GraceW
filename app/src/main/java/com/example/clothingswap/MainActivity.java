@@ -209,13 +209,13 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
             } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
             }
         }else if(requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE){
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted. You can continue accessing the content provider or media files
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
             }
 
