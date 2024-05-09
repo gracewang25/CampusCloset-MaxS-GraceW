@@ -305,8 +305,9 @@ public class CreateListing extends AppCompatActivity {
 
 
     private void handleErrorResponse(Response response) throws IOException {
-        String errorMessage = response.body() != null ? response.body().string() : "Unknown error";
-        runOnUiThread(() -> Toast.makeText(CreateListing.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show());
+        String responseBody = response.body() != null ? response.body().string() : "No response body";
+        Log.e("UploadImage", "Failed response from server: " + response.code() + " " + responseBody);
+        runOnUiThread(() -> Toast.makeText(CreateListing.this, "Error: " + response.code() + " " + responseBody, Toast.LENGTH_LONG).show());
     }
 
     private String getPathFromUri(Context context, Uri uri) {
