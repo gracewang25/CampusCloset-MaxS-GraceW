@@ -46,7 +46,8 @@ A location permission request pops up once per device, once it’s accepted, the
 
 ### Auto-Tagging of Uploaded Images
 - **Imagga API** automatically tags uploaded images, simplifying the listing process for users
-and enhancing the searchability of items.
+and enhancing the searchability of items. We used Retrofit to manage network requests. “Garment”, “clothing”, and “apparel” are common tags the API recognizes so we simply remove them! Included 40% confidence cutoff.
+
 ### Search and Discovery Features
 - Users can perform detailed searches by tags or titles, utilizing optimized Firebase queries for
 fast and relevant results.
