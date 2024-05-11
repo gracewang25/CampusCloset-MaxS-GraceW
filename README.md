@@ -1,6 +1,6 @@
 # CampusCloset 👕 Documentation
 
-## Overview
+## Overview 🌎
 Campus Closet is a platform that started as a digital thrift store for university students to swap clothing to other students, fostering a sustainable and economical approach to fashion. The app serves as a platform to reduce waste and promote the recycling of clothing, and allows users to interact with others as well as find recommendations for their closet.
 
 ## User Cases
@@ -33,7 +33,7 @@ among her peers
 - 4/25 - Final Touches
 - 4/25 - Last Class and Public Release
 
-## Technical Documentation
+## Technical Documentation 🔧
 
 ### Authentication & Data Storage
 - **Firebase Realtime Database** is used for secure user authentication and data storage,
