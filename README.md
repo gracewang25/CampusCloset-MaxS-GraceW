@@ -1,12 +1,9 @@
 # CampusCloset 👕 Documentation
 
 ## Overview
-Campus Closet is an innovative digital thrift store that leverages technology to facilitate the
-swapping of clothes, fostering a sustainable and economical approach to fashion, particularly for
-students. The app serves as a platform to reduce waste and promote the recycling of clothing.
+Campus Closet is a platform that started as a digital thrift store for university students to swap clothing to other students, fostering a sustainable and economical approach to fashion.
+students. The app serves as a platform to reduce waste and promote the recycling of clothing, and allows users to interact with others as well as find recommendations for their closet.
 
-## What’s our final project?
-Campus Closet is a platform for university students to swap, borrow and sell clothing to other students! It will include a social page that allows users to interact with others as well as find recommendations for their closet. 
 Who is it for? Have you ever needed a suit before an interview or a dress before a formal, at the last minute? Have you ever felt that you had too many articles collecting dust in your closet? For now we want to test in the University/student ecosystem by validating with .edu emails, but in the future, our app is for any ecoconscious or thrifty user who will find value in a virtual clothing swap.
 
 ## What will it do?
