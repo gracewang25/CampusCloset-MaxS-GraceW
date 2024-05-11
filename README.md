@@ -42,6 +42,52 @@ handling session management and user data efficiently.
 - **Google Geocaching API** and **Android Location Services** ensure that users can find and
 swap clothes within their local area, enhancing the convenience and reducing the carbon
 footprint associated with shipping.
+### Auto-Tagging of Uploaded Images
+- **Imagga API** automatically tags uploaded images, simplifying the listing process for users
+and enhancing the searchability of items.
+### Search and Discovery Features
+- Users can perform detailed searches by tags or titles, utilizing optimized Firebase queries for
+fast and relevant results.
+### Tinder-Like Swiping Interface
+- Implemented using `androidx.cardview.widget.CardView` and Glide, this feature allows users
+to quickly browse through clothing options in a fun and engaging way.
+
+## Challenges and Solutions 🏔️
+### Git Version Control
+- **Challenges**: Numerous conflicts between commits and difficulties in managing branches.
+- **Solutions**: Adopted more rigorous branch management strategies, utilized git stashing and
+rebasing to maintain a clean commit history.
+### API Integration
+- **Challenges**: Initial inaccuracy in tagging from Imagga API, leading to irrelevant tags.
+- **Solutions**: Adjusted the confidence thresholds for tags and implemented filters to exclude
+common but unhelpful tags.
+### Time Management and Debugging
+- **Challenges**: Integrating features within the tight timeline of the academic semester proved
+challenging, compounded by extensive debugging sessions that were time-consuming.
+- **Solutions**: Enhanced planning and time management were employed, along with more
+effective debugging practices like systematic logging and using debugging tools more
+proficiently.
+### User Interface Design
+- **Challenges**: Creating an intuitive and appealing user interface that could operate efficiently
+across different devices and operating systems.
+- **Solutions**: Iterative design improvements through usability testing ensured a more
+user-friendly interface.
+
+## Future Directions
+- **Feature Enhancements**: Include secure payment options for premium features, develop a
+more sophisticated tagging algorithm, and create a personalized explore page.
+- **User Experience**: Continuous improvement of the app’s UX/UI to ensure smooth and
+intuitive user interactions.
+- **Market Expansion**: Extend the service to include non-students and additional geographical
+locations.
+
+## Citations
+- **The Noun Project**: Icons and other graphical assets.
+- **Firebase**: For authentication and database solutions.
+- **Google Developers**: Location APIs.
+- **Imagga**: Image recognition services.
+- **Stack Overflow**: Developer community for troubleshooting and learning
+
 
 
 
