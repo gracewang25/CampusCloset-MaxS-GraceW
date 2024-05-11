@@ -1,6 +1,9 @@
-# CampusCloset 👕
-Go to maxim2 branch for latest changes
-https://docs.google.com/presentation/d/14qpLxy5YtdOUxOJqi4Fe9RQ8DnWlGYTPCk9kaVlaU3I
+# CampusCloset 👕 Documentation
+
+## Overview
+Campus Closet is an innovative digital thrift store that leverages technology to facilitate the
+swapping of clothes, fostering a sustainable and economical approach to fashion, particularly for
+students. The app serves as a platform to reduce waste and promote the recycling of clothing.
 
 ## What’s our final project?
 Campus Closet is a platform for university students to swap, borrow and sell clothing to other students! It will include a social page that allows users to interact with others as well as find recommendations for their closet. 
