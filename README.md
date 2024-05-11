@@ -36,12 +36,14 @@ among her peers
 ## Technical Documentation 🔧
 
 ### Authentication & Data Storage
-- **Firebase Realtime Database** is used for secure user authentication and data storage,
-handling session management and user data efficiently.
+- **Firebase Realtime Database** is used for secure user login, authentication and data storage,
+handling session management and user data efficiently. The database stores: "imageUri", "itemName", "listingId", "tags", "location" and "userEmail" fields with each item.
 ### Location-Based Services
 - **Google Geocaching API** and **Android Location Services** ensure that users can find and
 swap clothes within their local area, enhancing the convenience and reducing the carbon
-footprint associated with shipping.
+footprint associated with shipping. On the main explore page, we query Firebase by the location tag, and users are only displayed items from their “city.”
+A location permission request pops up once per device, once it’s accepted, the same device will always have location services enabled for the app.
+
 ### Auto-Tagging of Uploaded Images
 - **Imagga API** automatically tags uploaded images, simplifying the listing process for users
 and enhancing the searchability of items.
