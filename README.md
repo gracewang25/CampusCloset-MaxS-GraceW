@@ -1,6 +1,6 @@
 # CampusCloset Documentation
 
-## Our why! 🌎
+## Mission Statement 🌎
 The market for second-hand, sustainable fashion is growing. Introducing your digital thrift store: CampusCloset is a platform that started as a digital thrift store for university students to swap clothing to other students, fostering a sustainable and economical approach to fashion. The app serves as a platform to reduce waste and promote the recycling of clothing, and allows users to interact with others as well as find recommendations for their closet.
 
 ## User Cases
